@@ -30,7 +30,8 @@ class ImporterController < ApplicationController
     # Delete existing iip to ensure there can't be two iips for a user
     ImportInProgress.delete_all(["user_id = ?",User.current.id])
     # save import-in-progress data
-    iip = ImportInProgress.find_or_create_by_user_id(User.current.id)
+    iip = ImportInProgress.where(:user_id => User.current.id).first_or_create
+  	iip = ImportInProgress.where(:user_id => User.current.id).first_or_initialize
     iip.quote_char = params[:wrapper]
     iip.col_sep = params[:splitter]
     iip.encoding = params[:encoding]
